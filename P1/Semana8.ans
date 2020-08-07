@@ -1,0 +1,155 @@
+#include <p18f4550.inc>
+	
+	CONFIG WDT=OFF; disable watchdog timer
+	CONFIG MCLRE = ON; MCLEAR Pin on
+	CONFIG DEBUG = ON; Enable Debug Mode
+	CONFIG LVP = OFF; Low-Voltage programming disabled (necessary for debugging)
+	CONFIG FOSC = INTOSCIO_EC;Internal oscillator, port function on RA6 
+CODE
+ 
+Start:
+	
+	;15000000
+	;00000000111001001110000111000000  
+	;0x00E4E1C0
+	
+	;10000000
+	;00000000100110001001011010000000 
+	;0x00989680
+	
+	;25000000 
+	;00000001011111010111100001000000 
+	;0x0017D7840
+	
+	;12000000 
+	;00000000101101110001101100000000 
+	;0x00B71B00
+	
+	;18000000 
+	;00000001000100101010100010000000 
+	;0x00112A880
+	
+	;6000000 
+	;00000000010110111000110110000000 
+	;0x005B8D80
+MainLoop:
+    
+    ;questão 01
+    
+    ;n1 = 0x00E4E1C0
+    ;n2 = 0x00989680
+    ;resultado = 0x017D7840
+    
+    ;n1
+    
+    ;(10) = C0
+    MOVLW 0xC0
+    MOVWF 0x10
+   
+    ;(11) = E1
+    MOVLW 0xE1
+    MOVWF 0x11
+   
+    ;(12) = E4 
+    MOVLW 0xE4
+    MOVWF 0x12
+    
+    ;(13) = 00
+    MOVLW 0x00
+    MOVWF 0x13
+ 
+    ;n2
+    
+    ;(14) = 80
+    MOVLW 0x80
+    MOVWF 0x14
+    
+    ;(15) = 96
+    MOVLW 0x96
+    MOVWF 0x15
+    
+    ;(16) = 98
+    MOVLW 0x98
+    MOVWF 0x16
+    
+    ;(17) = 00
+    MOVLW 0x00
+    MOVWF 0x17
+    
+    ;soma
+    MOVF 0x10, W
+    ADDWF 0x14, W
+    MOVWF 0x03
+    
+    MOVF 0x11, W
+    ADDWFC 0x15, W
+    MOVWF 0x02
+    
+    MOVF 0x12, W
+    ADDWFC 0x16, W
+    MOVWF 0x01
+    
+    MOVF 0x13, W
+    ADDWFC 0x17, W
+    MOVWF 0x00
+    
+    ;questão 02
+    
+    ;n1 0x0112A880
+    ;n2 0x00B71B00
+   ; resultado = ?0x005B8D80
+   ;n1
+   
+   ;(20) = 80
+    MOVLW 0x80
+    MOVWF 0x20
+   ;(21) = A8
+    MOVLW 0xA8
+    MOVWF 0x21
+   ;(22) = 12
+    MOVLW 0x12
+    MOVWF 0x22
+   ;(23) = 01
+    MOVLW 0x01
+    MOVWF 0x23
+   ;n2
+   ;(24) = 00
+    MOVLW 0x00
+    MOVWF 0x24
+   ;(25) = 1B
+    MOVLW 0x1B
+    MOVWF 0x25
+   ;(26) = B7
+    MOVLW 0xB7
+    MOVWF 0x26
+   ;(27) = 00
+    MOVLW 0x00
+    MOVWF 0x27
+   ;subtração
+    MOVF 0x24, W
+    SUBWF 0x20, W
+    MOVWF 0x07
+   
+    MOVF 0x25, W
+    SUBWFB 0x21, W
+    MOVWF 0x06
+   
+    MOVF 0x26, W
+    SUBWFB 0x22, W
+    MOVWF 0x05
+   
+    MOVF 0x27, W
+    SUBWFB 0x23, W
+    MOVWF 0x04
+   
+   ;Questão 03
+   
+    MOVLW 0x64
+    MULLW 0x14
+   
+    MOVFF PRODH, 0x08
+    MOVFF PRODL, 0x09
+         
+    GOTO MainLoop
+	
+   end
